@@ -1,3 +1,35 @@
+# Como fazer o Deploy na Azure
+
+1. Criar um Storage Account para Acessar o Bash da Azure;
+2. Executar os seguintes comandos no terminaL;
+
+Criando Resource Group
+```
+az group create --name rg-buyit-azure --location brazilsouth
+```
+
+Criando o Servidor SQL
+```
+az sql server create -l brazilsouth -g rg-buyit-azure -n sqlserver-buyit-azure -u admbuyit -p Buyit@123 --enable-public-network true
+```
+
+Criando o Banco SQL
+```
+az sql db create -g rg-buyit-azure -s sqlserver-buyit-azure -n db-buyit --service-objective Basic --backup-storage-redundancy Local --zone-redundant false
+```
+
+Criando uma regra para deixar todos os IPs acessarem o Banco
+```
+az sql server firewall-rule create -g rg-buyit-azure -s sqlserver-buyit -n AllowAll --start-ip-address 0.0.0.0 --end-ip-address 255.255.255.255
+```
+
+3. Acessar o Banco de Dados Criado e fazer a Criação das Tabelas Conforme DDL enviado
+4. No projeto, executar os comandos `mvn clean`e depois `mvn clean package`para geração do .jar;
+5. Criar o Web App com as opções JAVA 17 e JAVA SE;
+6. Fazer o Deploy para o Web App Criado através do GITHUB;
+
+---
+
 # Documentação das Classes
 
 Este documento descreve as classes (tabelas), seus atributos e suas devidas requisições.
